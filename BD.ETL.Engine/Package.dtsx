@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package"
   DTS:PackageType="5"
-  DTS:VersionBuild="183"
-  DTS:VersionGUID="{092C13B7-9F49-43EA-B994-661C89B4219F}">
+  DTS:VersionBuild="189"
+  DTS:VersionGUID="{4844215D-AB8A-4413-8A37-A6B4AF439C6B}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -17242,7 +17242,7 @@ FROM            dbo.Dim_Fecha</property>
                       name="EnvioMediante" />
                     <externalMetadataColumn
                       refId="Package\Load Facts\Destination Fact.Inputs[OLE DB Destination Input].ExternalColumns[Carga]"
-                      dataType="i4"
+                      dataType="cy"
                       name="Carga" />
                     <externalMetadataColumn
                       refId="Package\Load Facts\Destination Fact.Inputs[OLE DB Destination Input].ExternalColumns[PrecioUnitario]"
@@ -17272,6 +17272,10 @@ FROM            dbo.Dim_Fecha</property>
                       refId="Package\Load Facts\Destination Fact.Inputs[OLE DB Destination Input].ExternalColumns[PuntoReorden]"
                       dataType="i2"
                       name="PuntoReorden" />
+                    <externalMetadataColumn
+                      refId="Package\Load Facts\Destination Fact.Inputs[OLE DB Destination Input].ExternalColumns[UltimoRegistro]"
+                      dataType="bool"
+                      name="UltimoRegistro" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -18465,6 +18469,11 @@ where [refTable].[ProductID] = ?</property>
                       cachedDataType="i4"
                       cachedName="Fecha_Key"
                       lineageId="Package\Load Facts\Sort 1.Outputs[Sort Output].Columns[Fecha_Key]" />
+                    <inputColumn
+                      refId="Package\Load Facts\Merge Facts y Orders.Inputs[Merge Join Right Input].Columns[UltimoRegistro]"
+                      cachedDataType="bool"
+                      cachedName="UltimoRegistro"
+                      lineageId="Package\Load Facts\Sort 1.Outputs[Sort Output].Columns[UltimoRegistro]" />
                   </inputColumns>
                   <externalMetadataColumns />
                 </input>
@@ -18984,6 +18993,19 @@ where [refTable].[ProductID] = ?</property>
                           dataType="System.Int32"
                           description="The input column associated with this output column"
                           name="InputColumnID">#{Package\Load Facts\Merge Facts y Orders.Inputs[Merge Join Right Input].Columns[Fecha_Key]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load Facts\Merge Facts y Orders.Outputs[Merge Join Output].Columns[UltimoRegistro]"
+                      dataType="bool"
+                      lineageId="Package\Load Facts\Merge Facts y Orders.Outputs[Merge Join Output].Columns[UltimoRegistro]"
+                      name="UltimoRegistro">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="The input column associated with this output column"
+                          name="InputColumnID">#{Package\Load Facts\Merge Facts y Orders.Inputs[Merge Join Right Input].Columns[UltimoRegistro]}</property>
                       </properties>
                     </outputColumn>
                   </outputColumns>
@@ -20366,6 +20388,22 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
                           name="NewSortKeyPosition">0</property>
                       </properties>
                     </inputColumn>
+                    <inputColumn
+                      refId="Package\Load Facts\Sort 1.Inputs[Sort Input].Columns[UltimoRegistro]"
+                      cachedDataType="bool"
+                      cachedName="UltimoRegistro"
+                      lineageId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].Columns[UltimoRegistro]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the comparison options for character data."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the sort order of the column."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
                   </inputColumns>
                   <externalMetadataColumns />
                 </input>
@@ -20586,6 +20624,19 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
                           name="SortColumnId">#{Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].Columns[Fecha_Key]}</property>
                       </properties>
                     </outputColumn>
+                    <outputColumn
+                      refId="Package\Load Facts\Sort 1.Outputs[Sort Output].Columns[UltimoRegistro]"
+                      dataType="bool"
+                      lineageId="Package\Load Facts\Sort 1.Outputs[Sort Output].Columns[UltimoRegistro]"
+                      name="UltimoRegistro">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the lineage identifier of the input column that is associated with this output column."
+                          name="SortColumnId">#{Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].Columns[UltimoRegistro]}</property>
+                      </properties>
+                    </outputColumn>
                   </outputColumns>
                   <externalMetadataColumns />
                 </output>
@@ -20796,6 +20847,15 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
                       lineageId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].Columns[PuntoReorden]"
                       name="PuntoReorden"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].Columns[UltimoRegistro]"
+                      dataType="bool"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].ExternalColumns[UltimoRegistro]"
+                      lineageId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].Columns[UltimoRegistro]"
+                      name="UltimoRegistro"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -20863,6 +20923,10 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
                       refId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].ExternalColumns[PuntoReorden]"
                       dataType="i2"
                       name="PuntoReorden" />
+                    <externalMetadataColumn
+                      refId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].ExternalColumns[UltimoRegistro]"
+                      dataType="bool"
+                      name="UltimoRegistro" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -20950,6 +21014,11 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
                       dataType="i2"
                       lineageId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Error Output].Columns[PuntoReorden]"
                       name="PuntoReorden" />
+                    <outputColumn
+                      refId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Error Output].Columns[UltimoRegistro]"
+                      dataType="bool"
+                      lineageId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Error Output].Columns[UltimoRegistro]"
+                      name="UltimoRegistro" />
                     <outputColumn
                       refId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
                       dataType="i4"
@@ -23519,7 +23588,7 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
         <NodeLayout
           Size="159,42"
           Id="Package\Load Facts\Conditional Split"
-          TopLeft="540,325" />
+          TopLeft="544,325" />
         <NodeLayout
           Size="108,42"
           Id="Package\Load Facts\Sort 1"
@@ -23616,25 +23685,25 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load Facts.Paths[Nuevo]"
-          TopLeft="699,343.5">
+          TopLeft="703,343.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="62,0"
+              EndConnector="58,0"
               Start="0,0"
-              End="54.5,0">
+              End="50.5,0">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="54.5,0" />
+                    End="50.5,0" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="12.79796875,5,28.9040625,9.421875"
+              BoundingBox="10.79796875,5,28.9040625,9.421875"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
@@ -23644,14 +23713,14 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="28,0"
+              EndConnector="32,0"
               Start="0,0"
-              End="20.5,0">
+              End="24.5,0">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="20.5,0" />
+                    End="24.5,0" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -23819,28 +23888,28 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
         <NodeLayout
           Size="168,42"
           Id="Package\Load Facts\Destination Fact 1"
-          TopLeft="529,428" />
+          TopLeft="535,490" />
         <EdgeLayout
           Id="Package\Load Facts.Paths[Editado]"
-          TopLeft="616.25,367">
+          TopLeft="621.25,367">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,61"
+              EndConnector="0,123"
               Start="0,0"
-              End="0,53.5">
+              End="0,115.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,53.5" />
+                    End="0,115.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="-16.98203125,21.87548828125,33.9640625,9.7490234375"
+              BoundingBox="-16.98203125,52.87548828125,33.9640625,9.7490234375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
