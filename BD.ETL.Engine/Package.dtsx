@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package"
   DTS:PackageType="5"
-  DTS:VersionBuild="189"
-  DTS:VersionGUID="{4844215D-AB8A-4413-8A37-A6B4AF439C6B}">
+  DTS:VersionBuild="198"
+  DTS:VersionGUID="{A02AD14A-84A9-42FF-80B4-422D8EDED99C}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -17042,6 +17042,79 @@ FROM            dbo.Dim_Fecha</property>
               </outputs>
             </component>
             <component
+              refId="Package\Load Facts\Derived Column"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Load Facts\Derived Column.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load Facts\Derived Column.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\Load Facts\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Facts\Derived Column.Outputs[Derived Column Output].Columns[FechaModificacion.DW]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load Facts\Derived Column.Outputs[Derived Column Output].Columns[FechaModificacion.DW]"
+                      name="FechaModificacion.DW"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">[GETDATE]()</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">GETDATE()</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load Facts\Derived Column.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\Load Facts\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load Facts\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load Facts\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load Facts\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load Facts\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
               refId="Package\Load Facts\Destination Fact"
               componentClassID="Microsoft.OLEDBDestination"
               contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
@@ -17205,6 +17278,12 @@ FROM            dbo.Dim_Fecha</property>
                       cachedName="Fecha_Key"
                       externalMetadataColumnId="Package\Load Facts\Destination Fact.Inputs[OLE DB Destination Input].ExternalColumns[Fecha_Key]"
                       lineageId="Package\Load Facts\Merge Facts y Orders.Outputs[Merge Join Output].Columns[Fecha_Key]" />
+                    <inputColumn
+                      refId="Package\Load Facts\Destination Fact.Inputs[OLE DB Destination Input].Columns[FechaModificacion]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="FechaModificacion"
+                      externalMetadataColumnId="Package\Load Facts\Destination Fact.Inputs[OLE DB Destination Input].ExternalColumns[FechaModificacion]"
+                      lineageId="Package\Load Facts\Merge Facts y Orders.Outputs[Merge Join Output].Columns[FechaModificacion]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -17273,9 +17352,9 @@ FROM            dbo.Dim_Fecha</property>
                       dataType="i2"
                       name="PuntoReorden" />
                     <externalMetadataColumn
-                      refId="Package\Load Facts\Destination Fact.Inputs[OLE DB Destination Input].ExternalColumns[UltimoRegistro]"
-                      dataType="bool"
-                      name="UltimoRegistro" />
+                      refId="Package\Load Facts\Destination Fact.Inputs[OLE DB Destination Input].ExternalColumns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      name="FechaModificacion" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -17468,6 +17547,12 @@ FROM            dbo.Dim_Fecha</property>
                       cachedName="Fecha_Key"
                       externalMetadataColumnId="Package\Load Facts\Destination Fact 1.Inputs[OLE DB Destination Input].ExternalColumns[Fecha_Key]"
                       lineageId="Package\Load Facts\Merge Facts y Orders.Outputs[Merge Join Output].Columns[Fecha_Key]" />
+                    <inputColumn
+                      refId="Package\Load Facts\Destination Fact 1.Inputs[OLE DB Destination Input].Columns[FechaModificacion.DW]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="FechaModificacion.DW"
+                      externalMetadataColumnId="Package\Load Facts\Destination Fact 1.Inputs[OLE DB Destination Input].ExternalColumns[FechaModificacion]"
+                      lineageId="Package\Load Facts\Derived Column.Outputs[Derived Column Output].Columns[FechaModificacion.DW]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -17535,6 +17620,10 @@ FROM            dbo.Dim_Fecha</property>
                       refId="Package\Load Facts\Destination Fact 1.Inputs[OLE DB Destination Input].ExternalColumns[PuntoReorden]"
                       dataType="i2"
                       name="PuntoReorden" />
+                    <externalMetadataColumn
+                      refId="Package\Load Facts\Destination Fact 1.Inputs[OLE DB Destination Input].ExternalColumns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      name="FechaModificacion" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -18470,10 +18559,10 @@ where [refTable].[ProductID] = ?</property>
                       cachedName="Fecha_Key"
                       lineageId="Package\Load Facts\Sort 1.Outputs[Sort Output].Columns[Fecha_Key]" />
                     <inputColumn
-                      refId="Package\Load Facts\Merge Facts y Orders.Inputs[Merge Join Right Input].Columns[UltimoRegistro]"
-                      cachedDataType="bool"
-                      cachedName="UltimoRegistro"
-                      lineageId="Package\Load Facts\Sort 1.Outputs[Sort Output].Columns[UltimoRegistro]" />
+                      refId="Package\Load Facts\Merge Facts y Orders.Inputs[Merge Join Right Input].Columns[FechaModificacion]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="FechaModificacion"
+                      lineageId="Package\Load Facts\Sort 1.Outputs[Sort Output].Columns[FechaModificacion]" />
                   </inputColumns>
                   <externalMetadataColumns />
                 </input>
@@ -18996,16 +19085,16 @@ where [refTable].[ProductID] = ?</property>
                       </properties>
                     </outputColumn>
                     <outputColumn
-                      refId="Package\Load Facts\Merge Facts y Orders.Outputs[Merge Join Output].Columns[UltimoRegistro]"
-                      dataType="bool"
-                      lineageId="Package\Load Facts\Merge Facts y Orders.Outputs[Merge Join Output].Columns[UltimoRegistro]"
-                      name="UltimoRegistro">
+                      refId="Package\Load Facts\Merge Facts y Orders.Outputs[Merge Join Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Load Facts\Merge Facts y Orders.Outputs[Merge Join Output].Columns[FechaModificacion]"
+                      name="FechaModificacion">
                       <properties>
                         <property
                           containsID="true"
                           dataType="System.Int32"
                           description="The input column associated with this output column"
-                          name="InputColumnID">#{Package\Load Facts\Merge Facts y Orders.Inputs[Merge Join Right Input].Columns[UltimoRegistro]}</property>
+                          name="InputColumnID">#{Package\Load Facts\Merge Facts y Orders.Inputs[Merge Join Right Input].Columns[FechaModificacion]}</property>
                       </properties>
                     </outputColumn>
                   </outputColumns>
@@ -20389,10 +20478,10 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
                       </properties>
                     </inputColumn>
                     <inputColumn
-                      refId="Package\Load Facts\Sort 1.Inputs[Sort Input].Columns[UltimoRegistro]"
-                      cachedDataType="bool"
-                      cachedName="UltimoRegistro"
-                      lineageId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].Columns[UltimoRegistro]">
+                      refId="Package\Load Facts\Sort 1.Inputs[Sort Input].Columns[FechaModificacion]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="FechaModificacion"
+                      lineageId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].Columns[FechaModificacion]">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -20625,16 +20714,16 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
                       </properties>
                     </outputColumn>
                     <outputColumn
-                      refId="Package\Load Facts\Sort 1.Outputs[Sort Output].Columns[UltimoRegistro]"
-                      dataType="bool"
-                      lineageId="Package\Load Facts\Sort 1.Outputs[Sort Output].Columns[UltimoRegistro]"
-                      name="UltimoRegistro">
+                      refId="Package\Load Facts\Sort 1.Outputs[Sort Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Load Facts\Sort 1.Outputs[Sort Output].Columns[FechaModificacion]"
+                      name="FechaModificacion">
                       <properties>
                         <property
                           containsID="true"
                           dataType="System.Int32"
                           description="Specifies the lineage identifier of the input column that is associated with this output column."
-                          name="SortColumnId">#{Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].Columns[UltimoRegistro]}</property>
+                          name="SortColumnId">#{Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].Columns[FechaModificacion]}</property>
                       </properties>
                     </outputColumn>
                   </outputColumns>
@@ -20667,7 +20756,11 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
                   dataType="System.String"
                   description="The SQL command to be executed."
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT FA1.*
+FROM Fact_Orden FA1
+INNER JOIN (
+    SELECT OrderId, max(FechaModificacion) AS lastUpdate FROM Fact_Orden GROUP BY OrderId
+) FA2 ON FA1.OrderId = FA2.OrderId AND FA1.FechaModificacion = FA2.lastUpdate</property>
                 <property
                   dataType="System.String"
                   description="The variable that contains the SQL command to be executed."
@@ -20684,7 +20777,7 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
                   dataType="System.Int32"
                   description="Specifies the mode used to access the database."
                   name="AccessMode"
-                  typeConverter="AccessMode">0</property>
+                  typeConverter="AccessMode">2</property>
                 <property
                   dataType="System.String"
                   description="The mappings between the parameters in the SQL command and variables."
@@ -20848,13 +20941,13 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
                       name="PuntoReorden"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].Columns[UltimoRegistro]"
-                      dataType="bool"
+                      refId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].ExternalColumns[UltimoRegistro]"
-                      lineageId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].Columns[UltimoRegistro]"
-                      name="UltimoRegistro"
+                      externalMetadataColumnId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].ExternalColumns[FechaModificacion]"
+                      lineageId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].Columns[FechaModificacion]"
+                      name="FechaModificacion"
                       truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
@@ -20924,9 +21017,9 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
                       dataType="i2"
                       name="PuntoReorden" />
                     <externalMetadataColumn
-                      refId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].ExternalColumns[UltimoRegistro]"
-                      dataType="bool"
-                      name="UltimoRegistro" />
+                      refId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Output].ExternalColumns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      name="FechaModificacion" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -21015,10 +21108,10 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
                       lineageId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Error Output].Columns[PuntoReorden]"
                       name="PuntoReorden" />
                     <outputColumn
-                      refId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Error Output].Columns[UltimoRegistro]"
-                      dataType="bool"
-                      lineageId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Error Output].Columns[UltimoRegistro]"
-                      name="UltimoRegistro" />
+                      refId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Error Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Error Output].Columns[FechaModificacion]"
+                      name="FechaModificacion" />
                     <outputColumn
                       refId="Package\Load Facts\Source Facts.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
                       dataType="i4"
@@ -21168,8 +21261,13 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
               name="Derived Column Output"
               startId="Package\Load Facts\Split Fecha.Outputs[Derived Column Output]" />
             <path
-              refId="Package\Load Facts.Paths[Editado]"
+              refId="Package\Load Facts.Paths[Derived Column Output1]"
               endId="Package\Load Facts\Destination Fact 1.Inputs[OLE DB Destination Input]"
+              name="Derived Column Output"
+              startId="Package\Load Facts\Derived Column.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\Load Facts.Paths[Editado]"
+              endId="Package\Load Facts\Derived Column.Inputs[Derived Column Input]"
               name="Editado"
               startId="Package\Load Facts\Conditional Split.Outputs[Editado]" />
             <path
@@ -23588,7 +23686,7 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
         <NodeLayout
           Size="159,42"
           Id="Package\Load Facts\Conditional Split"
-          TopLeft="544,325" />
+          TopLeft="546,326" />
         <NodeLayout
           Size="108,42"
           Id="Package\Load Facts\Sort 1"
@@ -23685,42 +23783,42 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load Facts.Paths[Nuevo]"
-          TopLeft="703,343.5">
+          TopLeft="705,344">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="58,0"
+              EndConnector="56,0"
               Start="0,0"
-              End="50.5,0">
+              End="48.5,0">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="50.5,0" />
+                    End="48.5,0" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="10.79796875,5,28.9040625,9.421875"
+              BoundingBox="9.79796875,5,28.9040625,9.421875"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Load Facts.Paths[Merge Join Output]"
-          TopLeft="512,346">
+          TopLeft="512,346.5">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="32,0"
+              EndConnector="34,0"
               Start="0,0"
-              End="24.5,0">
+              End="26.5,0">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="24.5,0" />
+                    End="26.5,0" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -23888,29 +23986,55 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
         <NodeLayout
           Size="168,42"
           Id="Package\Load Facts\Destination Fact 1"
-          TopLeft="535,490" />
+          TopLeft="534,497" />
+        <NodeLayout
+          Size="158,42"
+          Id="Package\Load Facts\Derived Column"
+          TopLeft="541,418" />
         <EdgeLayout
           Id="Package\Load Facts.Paths[Editado]"
-          TopLeft="621.25,367">
+          TopLeft="622.75,368">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,123"
+              EndConnector="0,50"
               Start="0,0"
-              End="0,115.5">
+              End="0,42.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,115.5" />
+                    End="0,42.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="-16.98203125,52.87548828125,33.9640625,9.7490234375"
+              BoundingBox="-16.98203125,16.37548828125,33.9640625,9.7490234375"
               RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Facts.Paths[Derived Column Output1]"
+          TopLeft="619,460">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,37"
+              Start="0,0"
+              End="0,29.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,29.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -24031,6 +24155,19 @@ WHERE        dbo."Order Details".OrderID = dbo.Orders.OrderID AND dbo."Order Det
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
     design-time-name="Package\Load Facts\Source Facts">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Facts\Destination Fact 1">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
