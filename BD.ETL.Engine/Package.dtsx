@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package"
   DTS:PackageType="5"
-  DTS:VersionBuild="198"
-  DTS:VersionGUID="{A02AD14A-84A9-42FF-80B4-422D8EDED99C}">
+  DTS:VersionBuild="208"
+  DTS:VersionGUID="{493D4BB7-AEE0-4A41-94A6-B6D5106A818F}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -212,6 +212,79 @@
               </outputs>
             </component>
             <component
+              refId="Package\Cargar Clientes\Derived Column"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Cargar Clientes\Derived Column.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Cargar Clientes\Derived Column.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\Cargar Clientes\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Cargar Clientes\Derived Column.Outputs[Derived Column Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Cargar Clientes\Derived Column.Outputs[Derived Column Output].Columns[FechaModificacion]"
+                      name="FechaModificacion"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">[GETDATE]()</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">GETDATE()</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Cargar Clientes\Derived Column.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\Cargar Clientes\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Cargar Clientes\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Cargar Clientes\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Cargar Clientes\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Cargar Clientes\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
               refId="Package\Cargar Clientes\Destination Clientes"
               componentClassID="Microsoft.OLEDBDestination"
               contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
@@ -326,6 +399,12 @@
                       cachedName="Country"
                       externalMetadataColumnId="Package\Cargar Clientes\Destination Clientes.Inputs[OLE DB Destination Input].ExternalColumns[Pais]"
                       lineageId="Package\Cargar Clientes\Merge Join.Outputs[Merge Join Output].Columns[Country]" />
+                    <inputColumn
+                      refId="Package\Cargar Clientes\Destination Clientes.Inputs[OLE DB Destination Input].Columns[FechaModificacion]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="FechaModificacion"
+                      externalMetadataColumnId="Package\Cargar Clientes\Destination Clientes.Inputs[OLE DB Destination Input].ExternalColumns[FechaModificacion]"
+                      lineageId="Package\Cargar Clientes\Derived Column.Outputs[Derived Column Output].Columns[FechaModificacion]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -341,7 +420,7 @@
                     <externalMetadataColumn
                       refId="Package\Cargar Clientes\Destination Clientes.Inputs[OLE DB Destination Input].ExternalColumns[NombreCompania]"
                       dataType="wstr"
-                      length="30"
+                      length="40"
                       name="NombreCompania" />
                     <externalMetadataColumn
                       refId="Package\Cargar Clientes\Destination Clientes.Inputs[OLE DB Destination Input].ExternalColumns[Region]"
@@ -363,6 +442,10 @@
                       dataType="wstr"
                       length="15"
                       name="Pais" />
+                    <externalMetadataColumn
+                      refId="Package\Cargar Clientes\Destination Clientes.Inputs[OLE DB Destination Input].ExternalColumns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      name="FechaModificacion" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -1777,6 +1860,11 @@ FROM            dbo.Dim_Cliente</property>
           </components>
           <paths>
             <path
+              refId="Package\Cargar Clientes.Paths[Derived Column Output]"
+              endId="Package\Cargar Clientes\Destination Clientes.Inputs[OLE DB Destination Input]"
+              name="Derived Column Output"
+              startId="Package\Cargar Clientes\Derived Column.Outputs[Derived Column Output]" />
+            <path
               refId="Package\Cargar Clientes.Paths[Editado]"
               endId="Package\Cargar Clientes\Destination Clientes 1.Inputs[OLE DB Destination Input]"
               name="Editado"
@@ -1788,7 +1876,7 @@ FROM            dbo.Dim_Cliente</property>
               startId="Package\Cargar Clientes\Merge Join.Outputs[Merge Join Output]" />
             <path
               refId="Package\Cargar Clientes.Paths[Nuevo Cliente]"
-              endId="Package\Cargar Clientes\Destination Clientes.Inputs[OLE DB Destination Input]"
+              endId="Package\Cargar Clientes\Derived Column.Inputs[Derived Column Input]"
               name="Nuevo Cliente"
               startId="Package\Cargar Clientes\Conditional Split.Outputs[Nuevo Cliente]" />
             <path
@@ -2013,6 +2101,79 @@ FROM            dbo.Dim_Cliente</property>
               </outputs>
             </component>
             <component
+              refId="Package\Cargar Empleados\Derived Column"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Cargar Empleados\Derived Column.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Cargar Empleados\Derived Column.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\Cargar Empleados\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Cargar Empleados\Derived Column.Outputs[Derived Column Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Cargar Empleados\Derived Column.Outputs[Derived Column Output].Columns[FechaModificacion]"
+                      name="FechaModificacion"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">[GETDATE]()</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">GETDATE()</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Cargar Empleados\Derived Column.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\Cargar Empleados\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Cargar Empleados\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Cargar Empleados\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Cargar Empleados\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Cargar Empleados\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
               refId="Package\Cargar Empleados\Destination Empleados"
               componentClassID="Microsoft.OLEDBDestination"
               contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
@@ -2126,6 +2287,12 @@ FROM            dbo.Dim_Cliente</property>
                       cachedName="LastName"
                       externalMetadataColumnId="Package\Cargar Empleados\Destination Empleados.Inputs[OLE DB Destination Input].ExternalColumns[Apellido]"
                       lineageId="Package\Cargar Empleados\Merge Join.Outputs[Merge Join Output].Columns[LastName]" />
+                    <inputColumn
+                      refId="Package\Cargar Empleados\Destination Empleados.Inputs[OLE DB Destination Input].Columns[FechaModificacion]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="FechaModificacion"
+                      externalMetadataColumnId="Package\Cargar Empleados\Destination Empleados.Inputs[OLE DB Destination Input].ExternalColumns[FechaModificacion]"
+                      lineageId="Package\Cargar Empleados\Derived Column.Outputs[Derived Column Output].Columns[FechaModificacion]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -2162,6 +2329,10 @@ FROM            dbo.Dim_Cliente</property>
                       dataType="wstr"
                       length="15"
                       name="Pais" />
+                    <externalMetadataColumn
+                      refId="Package\Cargar Empleados\Destination Empleados.Inputs[OLE DB Destination Input].ExternalColumns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      name="FechaModificacion" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -2485,6 +2656,11 @@ FROM            dbo.Dim_Cliente</property>
                       cachedLength="15"
                       cachedName="Pais"
                       lineageId="Package\Cargar Empleados\Sort 1.Outputs[Sort Output].Columns[Pais]" />
+                    <inputColumn
+                      refId="Package\Cargar Empleados\Merge Join.Inputs[Merge Join Right Input].Columns[FechaModificacion]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="FechaModificacion"
+                      lineageId="Package\Cargar Empleados\Sort 1.Outputs[Sort Output].Columns[FechaModificacion]" />
                   </inputColumns>
                   <externalMetadataColumns />
                 </input>
@@ -2673,6 +2849,19 @@ FROM            dbo.Dim_Cliente</property>
                           dataType="System.Int32"
                           description="The input column associated with this output column"
                           name="InputColumnID">#{Package\Cargar Empleados\Merge Join.Inputs[Merge Join Right Input].Columns[Pais]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Cargar Empleados\Merge Join.Outputs[Merge Join Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Cargar Empleados\Merge Join.Outputs[Merge Join Output].Columns[FechaModificacion]"
+                      name="FechaModificacion">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="The input column associated with this output column"
+                          name="InputColumnID">#{Package\Cargar Empleados\Merge Join.Inputs[Merge Join Right Input].Columns[FechaModificacion]}</property>
                       </properties>
                     </outputColumn>
                   </outputColumns>
@@ -3043,6 +3232,22 @@ FROM            dbo.Dim_Cliente</property>
                           name="NewSortKeyPosition">0</property>
                       </properties>
                     </inputColumn>
+                    <inputColumn
+                      refId="Package\Cargar Empleados\Sort 1.Inputs[Sort Input].Columns[FechaModificacion]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="FechaModificacion"
+                      lineageId="Package\Cargar Empleados\Source EmpleadosDW.Outputs[OLE DB Source Output].Columns[FechaModificacion]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the comparison options for character data."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the sort order of the column."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
                   </inputColumns>
                   <externalMetadataColumns />
                 </input>
@@ -3148,6 +3353,19 @@ FROM            dbo.Dim_Cliente</property>
                           dataType="System.Int32"
                           description="Specifies the lineage identifier of the input column that is associated with this output column."
                           name="SortColumnId">#{Package\Cargar Empleados\Source EmpleadosDW.Outputs[OLE DB Source Output].Columns[Pais]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Cargar Empleados\Sort 1.Outputs[Sort Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Cargar Empleados\Sort 1.Outputs[Sort Output].Columns[FechaModificacion]"
+                      name="FechaModificacion">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the lineage identifier of the input column that is associated with this output column."
+                          name="SortColumnId">#{Package\Cargar Empleados\Source EmpleadosDW.Outputs[OLE DB Source Output].Columns[FechaModificacion]}</property>
                       </properties>
                     </outputColumn>
                   </outputColumns>
@@ -3392,8 +3610,10 @@ FROM            dbo.Employees</property>
                   dataType="System.String"
                   description="The SQL command to be executed."
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT        EmployeeID
-FROM            dbo.Dim_Empleado</property>
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select D1.* from Dim_Empleado D1
+INNER JOIN (
+Select EmployeeID,MAX(FechaModificacion) as lastUpdate from Dim_Empleado Group by EmployeeID
+) D2 on D1.EmployeeID = D2.EmployeeID And D1.FechaModificacion = D2.lastUpdate</property>
                 <property
                   dataType="System.String"
                   description="The variable that contains the SQL command to be executed."
@@ -3410,7 +3630,7 @@ FROM            dbo.Dim_Empleado</property>
                   dataType="System.Int32"
                   description="Specifies the mode used to access the database."
                   name="AccessMode"
-                  typeConverter="AccessMode">0</property>
+                  typeConverter="AccessMode">2</property>
                 <property
                   dataType="System.String"
                   description="The mappings between the parameters in the SQL command and variables."
@@ -3497,6 +3717,15 @@ FROM            dbo.Dim_Empleado</property>
                       lineageId="Package\Cargar Empleados\Source EmpleadosDW.Outputs[OLE DB Source Output].Columns[Pais]"
                       name="Pais"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Cargar Empleados\Source EmpleadosDW.Outputs[OLE DB Source Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Cargar Empleados\Source EmpleadosDW.Outputs[OLE DB Source Output].ExternalColumns[FechaModificacion]"
+                      lineageId="Package\Cargar Empleados\Source EmpleadosDW.Outputs[OLE DB Source Output].Columns[FechaModificacion]"
+                      name="FechaModificacion"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -3533,6 +3762,10 @@ FROM            dbo.Dim_Empleado</property>
                       dataType="wstr"
                       length="15"
                       name="Pais" />
+                    <externalMetadataColumn
+                      refId="Package\Cargar Empleados\Source EmpleadosDW.Outputs[OLE DB Source Output].ExternalColumns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      name="FechaModificacion" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -3581,6 +3814,11 @@ FROM            dbo.Dim_Empleado</property>
                       lineageId="Package\Cargar Empleados\Source EmpleadosDW.Outputs[OLE DB Source Error Output].Columns[Pais]"
                       name="Pais" />
                     <outputColumn
+                      refId="Package\Cargar Empleados\Source EmpleadosDW.Outputs[OLE DB Source Error Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Cargar Empleados\Source EmpleadosDW.Outputs[OLE DB Source Error Output].Columns[FechaModificacion]"
+                      name="FechaModificacion" />
+                    <outputColumn
                       refId="Package\Cargar Empleados\Source EmpleadosDW.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
                       dataType="i4"
                       lineageId="Package\Cargar Empleados\Source EmpleadosDW.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
@@ -3600,6 +3838,11 @@ FROM            dbo.Dim_Empleado</property>
           </components>
           <paths>
             <path
+              refId="Package\Cargar Empleados.Paths[Derived Column Output]"
+              endId="Package\Cargar Empleados\Destination Empleados.Inputs[OLE DB Destination Input]"
+              name="Derived Column Output"
+              startId="Package\Cargar Empleados\Derived Column.Outputs[Derived Column Output]" />
+            <path
               refId="Package\Cargar Empleados.Paths[Editado]"
               endId="Package\Cargar Empleados\Destination Empleados 1.Inputs[OLE DB Destination Input]"
               name="Editado"
@@ -3611,7 +3854,7 @@ FROM            dbo.Dim_Empleado</property>
               startId="Package\Cargar Empleados\Merge Join.Outputs[Merge Join Output]" />
             <path
               refId="Package\Cargar Empleados.Paths[Nuevo Empleado]"
-              endId="Package\Cargar Empleados\Destination Empleados.Inputs[OLE DB Destination Input]"
+              endId="Package\Cargar Empleados\Derived Column.Inputs[Derived Column Input]"
               name="Nuevo Empleado"
               startId="Package\Cargar Empleados\Conditional Split.Outputs[Nuevo Empleado]" />
             <path
@@ -12609,84 +12852,84 @@ FROM            dbo.Dim_Producto</property>
               startId="Package\Cargar Facts\Nuevos | Editados.Outputs[Nuevo Registro]" />
             <path
               refId="Package\Cargar Facts.Paths[OLE DB Source Output6]"
-              endId="Package\Cargar Facts\Sort 5.Inputs[Sort Input]"
-              name="OLE DB Source Output"
-              startId="Package\Cargar Facts\Source Productos.Outputs[OLE DB Source Output]" />
-            <path
-              refId="Package\Cargar Facts.Paths[OLE DB Source Output5]"
-              endId="Package\Cargar Facts\Sort 9 1.Inputs[Sort Input]"
-              name="OLE DB Source Output"
-              startId="Package\Cargar Facts\Source Facts Orders 1.Outputs[OLE DB Source Output]" />
-            <path
-              refId="Package\Cargar Facts.Paths[OLE DB Source Output3]"
-              endId="Package\Cargar Facts\Sort.Inputs[Sort Input]"
-              name="OLE DB Source Output"
-              startId="Package\Cargar Facts\Source Fechas.Outputs[OLE DB Source Output]" />
-            <path
-              refId="Package\Cargar Facts.Paths[OLE DB Source Output4]"
-              endId="Package\Cargar Facts\Derived Column.Inputs[Derived Column Input]"
-              name="OLE DB Source Output"
-              startId="Package\Cargar Facts\Source Northwind.Outputs[OLE DB Source Output]" />
-            <path
-              refId="Package\Cargar Facts.Paths[OLE DB Source Output1]"
-              endId="Package\Cargar Facts\Sort 2.Inputs[Sort Input]"
-              name="OLE DB Source Output"
-              startId="Package\Cargar Facts\Source Empleados.Outputs[OLE DB Source Output]" />
-            <path
-              refId="Package\Cargar Facts.Paths[OLE DB Source Output]"
-              endId="Package\Cargar Facts\Sort 9.Inputs[Sort Input]"
-              name="OLE DB Source Output"
-              startId="Package\Cargar Facts\Source Facts Orders 1 1.Outputs[OLE DB Source Output]" />
-            <path
-              refId="Package\Cargar Facts.Paths[OLE DB Source Output2]"
               endId="Package\Cargar Facts\Sort 7.Inputs[Sort Input]"
               name="OLE DB Source Output"
               startId="Package\Cargar Facts\Source Clientes.Outputs[OLE DB Source Output]" />
             <path
+              refId="Package\Cargar Facts.Paths[OLE DB Source Output5]"
+              endId="Package\Cargar Facts\Sort 9.Inputs[Sort Input]"
+              name="OLE DB Source Output"
+              startId="Package\Cargar Facts\Source Facts Orders 1 1.Outputs[OLE DB Source Output]" />
+            <path
+              refId="Package\Cargar Facts.Paths[OLE DB Source Output3]"
+              endId="Package\Cargar Facts\Derived Column.Inputs[Derived Column Input]"
+              name="OLE DB Source Output"
+              startId="Package\Cargar Facts\Source Northwind.Outputs[OLE DB Source Output]" />
+            <path
+              refId="Package\Cargar Facts.Paths[OLE DB Source Output4]"
+              endId="Package\Cargar Facts\Sort 2.Inputs[Sort Input]"
+              name="OLE DB Source Output"
+              startId="Package\Cargar Facts\Source Empleados.Outputs[OLE DB Source Output]" />
+            <path
+              refId="Package\Cargar Facts.Paths[OLE DB Source Output1]"
+              endId="Package\Cargar Facts\Sort 9 1.Inputs[Sort Input]"
+              name="OLE DB Source Output"
+              startId="Package\Cargar Facts\Source Facts Orders 1.Outputs[OLE DB Source Output]" />
+            <path
+              refId="Package\Cargar Facts.Paths[OLE DB Source Output]"
+              endId="Package\Cargar Facts\Sort 5.Inputs[Sort Input]"
+              name="OLE DB Source Output"
+              startId="Package\Cargar Facts\Source Productos.Outputs[OLE DB Source Output]" />
+            <path
+              refId="Package\Cargar Facts.Paths[OLE DB Source Output2]"
+              endId="Package\Cargar Facts\Sort.Inputs[Sort Input]"
+              name="OLE DB Source Output"
+              startId="Package\Cargar Facts\Source Fechas.Outputs[OLE DB Source Output]" />
+            <path
               refId="Package\Cargar Facts.Paths[Sort Output8]"
+              endId="Package\Cargar Facts\Agrego Clientes.Inputs[Merge Join Right Input]"
+              name="Sort Output"
+              startId="Package\Cargar Facts\Sort 7.Outputs[Sort Output]" />
+            <path
+              refId="Package\Cargar Facts.Paths[Sort Output]"
               endId="Package\Cargar Facts\Merge Join 2.Inputs[Merge Join Left Input]"
               name="Sort Output"
               startId="Package\Cargar Facts\Sort 8.Outputs[Sort Output]" />
             <path
-              refId="Package\Cargar Facts.Paths[Sort Output]"
+              refId="Package\Cargar Facts.Paths[Sort Output1]"
               endId="Package\Cargar Facts\Merge Join 2.Inputs[Merge Join Right Input]"
               name="Sort Output"
               startId="Package\Cargar Facts\Sort 9.Outputs[Sort Output]" />
             <path
-              refId="Package\Cargar Facts.Paths[Sort Output1]"
+              refId="Package\Cargar Facts.Paths[Sort Output2]"
               endId="Package\Cargar Facts\Agrego Clientes.Inputs[Merge Join Left Input]"
               name="Sort Output"
               startId="Package\Cargar Facts\Sort 6.Outputs[Sort Output]" />
             <path
-              refId="Package\Cargar Facts.Paths[Sort Output2]"
+              refId="Package\Cargar Facts.Paths[Sort Output3]"
               endId="Package\Cargar Facts\Merge Join.Inputs[Merge Join Left Input]"
               name="Sort Output"
               startId="Package\Cargar Facts\Sort 1.Outputs[Sort Output]" />
             <path
-              refId="Package\Cargar Facts.Paths[Sort Output3]"
+              refId="Package\Cargar Facts.Paths[Sort Output4]"
               endId="Package\Cargar Facts\Merge Join 1.Inputs[Merge Join Left Input]"
               name="Sort Output"
               startId="Package\Cargar Facts\Sort 3.Outputs[Sort Output]" />
             <path
-              refId="Package\Cargar Facts.Paths[Sort Output4]"
+              refId="Package\Cargar Facts.Paths[Sort Output5]"
               endId="Package\Cargar Facts\Agrego Productos.Inputs[Merge Join Right Input]"
               name="Sort Output"
               startId="Package\Cargar Facts\Sort 5.Outputs[Sort Output]" />
             <path
-              refId="Package\Cargar Facts.Paths[Sort Output5]"
+              refId="Package\Cargar Facts.Paths[Sort Output6]"
               endId="Package\Cargar Facts\Merge Join 1.Inputs[Merge Join Right Input]"
               name="Sort Output"
               startId="Package\Cargar Facts\Sort 2.Outputs[Sort Output]" />
             <path
-              refId="Package\Cargar Facts.Paths[Sort Output6]"
+              refId="Package\Cargar Facts.Paths[Sort Output7]"
               endId="Package\Cargar Facts\Merge Join.Inputs[Merge Join Right Input]"
               name="Sort Output"
               startId="Package\Cargar Facts\Sort.Outputs[Sort Output]" />
-            <path
-              refId="Package\Cargar Facts.Paths[Sort Output7]"
-              endId="Package\Cargar Facts\Agrego Clientes.Inputs[Merge Join Right Input]"
-              name="Sort Output"
-              startId="Package\Cargar Facts\Sort 7.Outputs[Sort Output]" />
             <path
               refId="Package\Cargar Facts.Paths[Sort Output9]"
               endId="Package\Cargar Facts\Agrego Productos.Inputs[Merge Join Left Input]"
@@ -12862,6 +13105,152 @@ FROM            dbo.Dim_Producto</property>
               </outputs>
             </component>
             <component
+              refId="Package\Cargar Productos\Derived Column"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Cargar Productos\Derived Column.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Cargar Productos\Derived Column.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\Cargar Productos\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Cargar Productos\Derived Column.Outputs[Derived Column Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Cargar Productos\Derived Column.Outputs[Derived Column Output].Columns[FechaModificacion]"
+                      name="FechaModificacion"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">[GETDATE]()</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">GETDATE()</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Cargar Productos\Derived Column.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\Cargar Productos\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Cargar Productos\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Cargar Productos\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Cargar Productos\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Cargar Productos\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Cargar Productos\Derived Column 1"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column 1"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Cargar Productos\Derived Column 1.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Cargar Productos\Derived Column 1.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\Cargar Productos\Derived Column 1.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Cargar Productos\Derived Column 1.Outputs[Derived Column Output].Columns[FechaModificacion.DW]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Cargar Productos\Derived Column 1.Outputs[Derived Column Output].Columns[FechaModificacion.DW]"
+                      name="FechaModificacion.DW"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">[GETDATE]()</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">GETDATE()</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Cargar Productos\Derived Column 1.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\Cargar Productos\Derived Column 1.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Cargar Productos\Derived Column 1.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Cargar Productos\Derived Column 1.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Cargar Productos\Derived Column 1.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Cargar Productos\Derived Column 1.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
               refId="Package\Cargar Productos\Destination Productos DW"
               componentClassID="Microsoft.OLEDBDestination"
               contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
@@ -12960,6 +13349,12 @@ FROM            dbo.Dim_Producto</property>
                       cachedName="QuantityPerUnit"
                       externalMetadataColumnId="Package\Cargar Productos\Destination Productos DW.Inputs[OLE DB Destination Input].ExternalColumns[CantidiadPorUnidad]"
                       lineageId="Package\Cargar Productos\Merge Join.Outputs[Merge Join Output].Columns[QuantityPerUnit]" />
+                    <inputColumn
+                      refId="Package\Cargar Productos\Destination Productos DW.Inputs[OLE DB Destination Input].Columns[FechaModificacion]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="FechaModificacion"
+                      externalMetadataColumnId="Package\Cargar Productos\Destination Productos DW.Inputs[OLE DB Destination Input].ExternalColumns[FechaModificacion]"
+                      lineageId="Package\Cargar Productos\Derived Column.Outputs[Derived Column Output].Columns[FechaModificacion]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -12985,6 +13380,10 @@ FROM            dbo.Dim_Producto</property>
                       dataType="wstr"
                       length="20"
                       name="CantidiadPorUnidad" />
+                    <externalMetadataColumn
+                      refId="Package\Cargar Productos\Destination Productos DW.Inputs[OLE DB Destination Input].ExternalColumns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      name="FechaModificacion" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -13112,6 +13511,12 @@ FROM            dbo.Dim_Producto</property>
                       cachedName="QuantityPerUnit"
                       externalMetadataColumnId="Package\Cargar Productos\Destination Productos DW 1.Inputs[OLE DB Destination Input].ExternalColumns[CantidiadPorUnidad]"
                       lineageId="Package\Cargar Productos\Merge Join.Outputs[Merge Join Output].Columns[QuantityPerUnit]" />
+                    <inputColumn
+                      refId="Package\Cargar Productos\Destination Productos DW 1.Inputs[OLE DB Destination Input].Columns[FechaModificacion.DW]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="FechaModificacion.DW"
+                      externalMetadataColumnId="Package\Cargar Productos\Destination Productos DW 1.Inputs[OLE DB Destination Input].ExternalColumns[FechaModificacion]"
+                      lineageId="Package\Cargar Productos\Derived Column 1.Outputs[Derived Column Output].Columns[FechaModificacion.DW]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -13137,6 +13542,10 @@ FROM            dbo.Dim_Producto</property>
                       dataType="wstr"
                       length="20"
                       name="CantidiadPorUnidad" />
+                    <externalMetadataColumn
+                      refId="Package\Cargar Productos\Destination Productos DW 1.Inputs[OLE DB Destination Input].ExternalColumns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      name="FechaModificacion" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -13266,6 +13675,12 @@ FROM            dbo.Dim_Producto</property>
                       cachedName="CantidiadPorUnidad"
                       cachedSortKeyPosition="5"
                       lineageId="Package\Cargar Productos\Sort 1.Outputs[Sort Output].Columns[CantidiadPorUnidad]" />
+                    <inputColumn
+                      refId="Package\Cargar Productos\Merge Join.Inputs[Merge Join Right Input].Columns[FechaModificacion]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="FechaModificacion"
+                      cachedSortKeyPosition="6"
+                      lineageId="Package\Cargar Productos\Sort 1.Outputs[Sort Output].Columns[FechaModificacion]" />
                   </inputColumns>
                   <externalMetadataColumns />
                 </input>
@@ -13410,6 +13825,19 @@ FROM            dbo.Dim_Producto</property>
                           dataType="System.Int32"
                           description="The input column associated with this output column"
                           name="InputColumnID">#{Package\Cargar Productos\Merge Join.Inputs[Merge Join Right Input].Columns[CantidiadPorUnidad]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Cargar Productos\Merge Join.Outputs[Merge Join Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Cargar Productos\Merge Join.Outputs[Merge Join Output].Columns[FechaModificacion]"
+                      name="FechaModificacion">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="The input column associated with this output column"
+                          name="InputColumnID">#{Package\Cargar Productos\Merge Join.Inputs[Merge Join Right Input].Columns[FechaModificacion]}</property>
                       </properties>
                     </outputColumn>
                   </outputColumns>
@@ -13712,6 +14140,22 @@ FROM            dbo.Dim_Producto</property>
                           name="NewSortKeyPosition">5</property>
                       </properties>
                     </inputColumn>
+                    <inputColumn
+                      refId="Package\Cargar Productos\Sort 1.Inputs[Sort Input].Columns[FechaModificacion]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="FechaModificacion"
+                      lineageId="Package\Cargar Productos\Source Productos DW.Outputs[OLE DB Source Output].Columns[FechaModificacion]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the comparison options for character data."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the sort order of the column."
+                          name="NewSortKeyPosition">6</property>
+                      </properties>
+                    </inputColumn>
                   </inputColumns>
                   <externalMetadataColumns />
                 </input>
@@ -13792,6 +14236,20 @@ FROM            dbo.Dim_Producto</property>
                           dataType="System.Int32"
                           description="Specifies the lineage identifier of the input column that is associated with this output column."
                           name="SortColumnId">#{Package\Cargar Productos\Source Productos DW.Outputs[OLE DB Source Output].Columns[CantidiadPorUnidad]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Cargar Productos\Sort 1.Outputs[Sort Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Cargar Productos\Sort 1.Outputs[Sort Output].Columns[FechaModificacion]"
+                      name="FechaModificacion"
+                      sortKeyPosition="6">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the lineage identifier of the input column that is associated with this output column."
+                          name="SortColumnId">#{Package\Cargar Productos\Source Productos DW.Outputs[OLE DB Source Output].Columns[FechaModificacion]}</property>
                       </properties>
                     </outputColumn>
                   </outputColumns>
@@ -14013,8 +14471,10 @@ WHERE        dbo.Categories.CategoryID = dbo.Products.CategoryID</property>
                   dataType="System.String"
                   description="The SQL command to be executed."
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT        ProductID
-FROM            dbo.Dim_Producto</property>
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select D1.* from Dim_Producto D1
+INNER JOIN (
+Select ProductID,MAX(FechaModificacion) as lastUpdate from Dim_Producto Group by ProductID
+) D2 on D1.ProductID = D2.ProductID And D1.FechaModificacion = D2.lastUpdate</property>
                 <property
                   dataType="System.String"
                   description="The variable that contains the SQL command to be executed."
@@ -14031,7 +14491,7 @@ FROM            dbo.Dim_Producto</property>
                   dataType="System.Int32"
                   description="Specifies the mode used to access the database."
                   name="AccessMode"
-                  typeConverter="AccessMode">0</property>
+                  typeConverter="AccessMode">2</property>
                 <property
                   dataType="System.String"
                   description="The mappings between the parameters in the SQL command and variables."
@@ -14097,6 +14557,15 @@ FROM            dbo.Dim_Producto</property>
                       lineageId="Package\Cargar Productos\Source Productos DW.Outputs[OLE DB Source Output].Columns[CantidiadPorUnidad]"
                       name="CantidiadPorUnidad"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Cargar Productos\Source Productos DW.Outputs[OLE DB Source Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Cargar Productos\Source Productos DW.Outputs[OLE DB Source Output].ExternalColumns[FechaModificacion]"
+                      lineageId="Package\Cargar Productos\Source Productos DW.Outputs[OLE DB Source Output].Columns[FechaModificacion]"
+                      name="FechaModificacion"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -14122,6 +14591,10 @@ FROM            dbo.Dim_Producto</property>
                       dataType="wstr"
                       length="20"
                       name="CantidiadPorUnidad" />
+                    <externalMetadataColumn
+                      refId="Package\Cargar Productos\Source Productos DW.Outputs[OLE DB Source Output].ExternalColumns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      name="FechaModificacion" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -14157,6 +14630,11 @@ FROM            dbo.Dim_Producto</property>
                       lineageId="Package\Cargar Productos\Source Productos DW.Outputs[OLE DB Source Error Output].Columns[CantidiadPorUnidad]"
                       name="CantidiadPorUnidad" />
                     <outputColumn
+                      refId="Package\Cargar Productos\Source Productos DW.Outputs[OLE DB Source Error Output].Columns[FechaModificacion]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Cargar Productos\Source Productos DW.Outputs[OLE DB Source Error Output].Columns[FechaModificacion]"
+                      name="FechaModificacion" />
+                    <outputColumn
                       refId="Package\Cargar Productos\Source Productos DW.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
                       dataType="i4"
                       lineageId="Package\Cargar Productos\Source Productos DW.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
@@ -14176,8 +14654,18 @@ FROM            dbo.Dim_Producto</property>
           </components>
           <paths>
             <path
-              refId="Package\Cargar Productos.Paths[Editado]"
+              refId="Package\Cargar Productos.Paths[Derived Column Output]"
+              endId="Package\Cargar Productos\Destination Productos DW.Inputs[OLE DB Destination Input]"
+              name="Derived Column Output"
+              startId="Package\Cargar Productos\Derived Column.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\Cargar Productos.Paths[Derived Column Output1]"
               endId="Package\Cargar Productos\Destination Productos DW 1.Inputs[OLE DB Destination Input]"
+              name="Derived Column Output"
+              startId="Package\Cargar Productos\Derived Column 1.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\Cargar Productos.Paths[Editado]"
+              endId="Package\Cargar Productos\Derived Column 1.Inputs[Derived Column Input]"
               name="Editado"
               startId="Package\Cargar Productos\Conditional Split.Outputs[Editado]" />
             <path
@@ -14187,7 +14675,7 @@ FROM            dbo.Dim_Producto</property>
               startId="Package\Cargar Productos\Merge Join.Outputs[Merge Join Output]" />
             <path
               refId="Package\Cargar Productos.Paths[Nuevo Registro]"
-              endId="Package\Cargar Productos\Destination Productos DW.Inputs[OLE DB Destination Input]"
+              endId="Package\Cargar Productos\Derived Column.Inputs[Derived Column Input]"
               name="Nuevo Registro"
               startId="Package\Cargar Productos\Conditional Split.Outputs[Nuevo Registro]" />
             <path
@@ -21490,7 +21978,7 @@ INNER JOIN (
     design-time-name="Package\Cargar Clientes">
     <LayoutInfo>
       <GraphLayout
-        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
           Size="133,42"
           Id="Package\Cargar Clientes\Merge Join"
@@ -21510,7 +21998,7 @@ INNER JOIN (
         <NodeLayout
           Size="177,42"
           Id="Package\Cargar Clientes\Destination Clientes"
-          TopLeft="313,475" />
+          TopLeft="273,512" />
         <NodeLayout
           Size="99,42"
           Id="Package\Cargar Clientes\Sort"
@@ -21523,42 +22011,6 @@ INNER JOIN (
           Size="159,42"
           Id="Package\Cargar Clientes\Conditional Split"
           TopLeft="412,372" />
-        <EdgeLayout
-          Id="Package\Cargar Clientes.Paths[Nuevo Cliente]"
-          TopLeft="491.5,414">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-90,61"
-              Start="0,0"
-              End="-90,53.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,26.5" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,26.5"
-                    Point2="0,30.5"
-                    Point3="-4,30.5" />
-                  <mssgle:LineSegment
-                    End="-86,30.5" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-86,30.5"
-                    Point2="-90,30.5"
-                    Point3="-90,34.5" />
-                  <mssgle:LineSegment
-                    End="-90,53.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="-76.04134765625,35.5,62.0826953125,9.7490234375"
-              RelativePosition="Any" />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
         <EdgeLayout
           Id="Package\Cargar Clientes.Paths[Merge Join Output]"
           TopLeft="489,328">
@@ -21578,9 +22030,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -21650,9 +22100,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -21686,9 +22134,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -21710,9 +22156,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -21734,9 +22178,75 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="158,42"
+          Id="Package\Cargar Clientes\Derived Column"
+          TopLeft="234,424" />
+        <EdgeLayout
+          Id="Package\Cargar Clientes.Paths[Nuevo Cliente]"
+          TopLeft="412,393">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-99,31"
+              Start="0,0"
+              End="-99,23.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-95,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-95,0"
+                    Point2="-99,0"
+                    Point3="-99,4" />
+                  <mssgle:LineSegment
+                    End="-99,23.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
+              BoundingBox="-130.04134765625,-15.7490234375,62.0826953125,9.7490234375"
               RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Cargar Clientes.Paths[Derived Column Output]"
+          TopLeft="313,466">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="48.5,46"
+              Start="0,0"
+              End="48.5,38.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,19" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,19"
+                    Point2="0,23"
+                    Point3="4,23" />
+                  <mssgle:LineSegment
+                    End="44.5,23" />
+                  <mssgle:CubicBezierSegment
+                    Point1="44.5,23"
+                    Point2="48.5,23"
+                    Point3="48.5,27" />
+                  <mssgle:LineSegment
+                    End="48.5,38.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -21780,15 +22290,15 @@ INNER JOIN (
     design-time-name="Package\Cargar Empleados">
     <LayoutInfo>
       <GraphLayout
-        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
           Size="192,42"
           Id="Package\Cargar Empleados\Destination Empleados"
-          TopLeft="190,452" />
+          TopLeft="154,472" />
         <NodeLayout
           Size="201,42"
           Id="Package\Cargar Empleados\Destination Empleados 1"
-          TopLeft="435,457" />
+          TopLeft="508,469" />
         <NodeLayout
           Size="157,42"
           Id="Package\Cargar Empleados\Source Empleados"
@@ -21844,9 +22354,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -21880,9 +22388,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -21916,9 +22422,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -21952,45 +22456,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Cargar Empleados.Paths[Nuevo Empleado]"
-          TopLeft="406.5,385">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-120.5,67"
-              Start="0,0"
-              End="-120.5,59.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,29.5" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,29.5"
-                    Point2="0,33.5"
-                    Point3="-4,33.5" />
-                  <mssgle:LineSegment
-                    End="-116.5,33.5" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-116.5,33.5"
-                    Point2="-120.5,33.5"
-                    Point3="-120.5,37.5" />
-                  <mssgle:LineSegment
-                    End="-120.5,59.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="-97.91703125,38.5,75.3340625,11.609375"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -22012,45 +22478,99 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Cargar Empleados.Paths[Editado]"
-          TopLeft="431.666666666667,385">
+          TopLeft="406.5,385">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="103.833333333333,72"
+              EndConnector="202,84"
               Start="0,0"
-              End="103.833333333333,64.5">
+              End="202,76.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,25.2303860523039" />
+                    End="0,38" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,25.2303860523039"
-                    Point2="0,29.2303860523039"
-                    Point3="4,29.2303860523039" />
+                    Point1="0,38"
+                    Point2="0,42"
+                    Point3="4,42" />
                   <mssgle:LineSegment
-                    End="99.8333333333334,29.2303860523039" />
+                    End="198,42" />
                   <mssgle:CubicBezierSegment
-                    Point1="99.8333333333334,29.2303860523039"
-                    Point2="103.833333333333,29.2303860523039"
-                    Point3="103.833333333333,33.2303860523039" />
+                    Point1="198,42"
+                    Point2="202,42"
+                    Point3="202,46" />
                   <mssgle:LineSegment
-                    End="103.833333333333,64.5" />
+                    End="202,76.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="34.9346354166667,34.2303860523039,33.9640625,9.7490234375"
+              BoundingBox="84.01796875,47,33.9640625,9.7490234375"
               RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="158,42"
+          Id="Package\Cargar Empleados\Derived Column"
+          TopLeft="164,396" />
+        <EdgeLayout
+          Id="Package\Cargar Empleados.Paths[Nuevo Empleado]"
+          TopLeft="327,364">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-84,32"
+              Start="0,0"
+              End="-84,24.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-80,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-80,0"
+                    Point2="-84,0"
+                    Point3="-84,4" />
+                  <mssgle:LineSegment
+                    End="-84,24.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-121.66703125,-17.609375,75.3340625,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Cargar Empleados.Paths[Derived Column Output]"
+          TopLeft="246.5,438">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,34"
+              Start="0,0"
+              End="0,26.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,26.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -22205,6 +22725,40 @@ INNER JOIN (
           TopLeft="806,609" />
         <EdgeLayout
           Id="Package\Cargar Facts.Paths[OLE DB Source Output3]"
+          TopLeft="465.727272727273,24.9090909090909">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-10.0303030303032,60.2121212121212"
+              Start="0,0"
+              End="-2.53030303030317,60.2121212121212">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="18.5,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="18.5,0"
+                    Point2="22.5,0"
+                    Point3="22.5,4" />
+                  <mssgle:LineSegment
+                    End="22.5,56.2121212121212" />
+                  <mssgle:CubicBezierSegment
+                    Point1="22.5,56.2121212121212"
+                    Point2="22.5,60.2121212121212"
+                    Point3="18.5,60.2121212121212" />
+                  <mssgle:LineSegment
+                    End="-2.53030303030317,60.2121212121212" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Cargar Facts.Paths[OLE DB Source Output2]"
           TopLeft="671.545454545455,52.8181818181818">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -22222,38 +22776,12 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Cargar Facts.Paths[OLE DB Source Output2]"
-          TopLeft="983.75,498">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,33"
-              Start="0,0"
-              End="0,25.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,25.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Cargar Facts.Paths[OLE DB Source Output1]"
-          TopLeft="775.5,206">
+          TopLeft="1164.5,931">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
@@ -22270,33 +22798,29 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Cargar Facts.Paths[OLE DB Source Output]"
-          TopLeft="1143,654">
+          TopLeft="891,344">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,30"
+              EndConnector="0,26"
               Start="0,0"
-              End="0,22.5">
+              End="0,18.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,22.5" />
+                    End="0,18.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -22366,9 +22890,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -22390,9 +22912,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -22426,9 +22946,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -22450,9 +22968,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -22486,9 +23002,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -22546,9 +23060,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -22582,49 +23094,11 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Cargar Facts.Paths[Sort Output8]"
-          TopLeft="884,726">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="146,28"
-              Start="0,0"
-              End="146,20.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,10" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,10"
-                    Point2="0,14"
-                    Point3="4,14" />
-                  <mssgle:LineSegment
-                    End="142,14" />
-                  <mssgle:CubicBezierSegment
-                    Point1="142,14"
-                    Point2="146,14"
-                    Point3="146,18" />
-                  <mssgle:LineSegment
-                    End="146,20.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Cargar Facts.Paths[Sort Output7]"
           TopLeft="982,573">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -22654,13 +23128,11 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Cargar Facts.Paths[Sort Output6]"
+          Id="Package\Cargar Facts.Paths[Sort Output7]"
           TopLeft="623,101.818181818182">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -22684,13 +23156,11 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Cargar Facts.Paths[Sort Output5]"
+          Id="Package\Cargar Facts.Paths[Sort Output6]"
           TopLeft="773,274">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -22720,13 +23190,11 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Cargar Facts.Paths[Sort Output4]"
+          Id="Package\Cargar Facts.Paths[Sort Output5]"
           TopLeft="890,412">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -22756,13 +23224,11 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Cargar Facts.Paths[Sort Output3]"
+          Id="Package\Cargar Facts.Paths[Sort Output4]"
           TopLeft="594.909090909091,261.090909090909">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -22792,13 +23258,11 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Cargar Facts.Paths[Sort Output2]"
+          Id="Package\Cargar Facts.Paths[Sort Output3]"
           TopLeft="430.636363636364,153.090909090909">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -22816,13 +23280,11 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Cargar Facts.Paths[Sort Output1]"
+          Id="Package\Cargar Facts.Paths[Sort Output2]"
           TopLeft="783,572">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -22852,13 +23314,11 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Cargar Facts.Paths[Sort Output]"
+          Id="Package\Cargar Facts.Paths[Sort Output1]"
           TopLeft="1142,726">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -22888,38 +23348,90 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Cargar Facts.Paths[Sort Output]"
+          TopLeft="884,726">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="146,28"
+              Start="0,0"
+              End="146,20.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,10" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,10"
+                    Point2="0,14"
+                    Point3="4,14" />
+                  <mssgle:LineSegment
+                    End="142,14" />
+                  <mssgle:CubicBezierSegment
+                    Point1="142,14"
+                    Point2="146,14"
+                    Point3="146,18" />
+                  <mssgle:LineSegment
+                    End="146,20.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Cargar Facts.Paths[OLE DB Source Output6]"
-          TopLeft="891,344">
+          TopLeft="983.75,498">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,26"
+              EndConnector="0,33"
               Start="0,0"
-              End="0,18.5">
+              End="0,25.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,18.5" />
+                    End="0,25.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Cargar Facts.Paths[OLE DB Source Output5]"
-          TopLeft="1164.5,931">
+          TopLeft="1143,654">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,30"
+              Start="0,0"
+              End="0,22.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,22.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Cargar Facts.Paths[OLE DB Source Output4]"
+          TopLeft="775.5,206">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
@@ -22936,45 +23448,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Cargar Facts.Paths[OLE DB Source Output4]"
-          TopLeft="465.727272727273,24.9090909090909">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-10.0303030303032,60.2121212121212"
-              Start="0,0"
-              End="-2.53030303030317,60.2121212121212">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="18.5,0" />
-                  <mssgle:CubicBezierSegment
-                    Point1="18.5,0"
-                    Point2="22.5,0"
-                    Point3="22.5,4" />
-                  <mssgle:LineSegment
-                    End="22.5,56.2121212121212" />
-                  <mssgle:CubicBezierSegment
-                    Point1="22.5,56.2121212121212"
-                    Point2="22.5,60.2121212121212"
-                    Point3="18.5,60.2121212121212" />
-                  <mssgle:LineSegment
-                    End="-2.53030303030317,60.2121212121212" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -23050,11 +23524,11 @@ INNER JOIN (
     design-time-name="Package\Cargar Productos">
     <LayoutInfo>
       <GraphLayout
-        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
           Size="217,42"
           Id="Package\Cargar Productos\Destination Productos DW 1"
-          TopLeft="429,489" />
+          TopLeft="425,534" />
         <NodeLayout
           Size="99,42"
           Id="Package\Cargar Productos\Sort"
@@ -23066,11 +23540,11 @@ INNER JOIN (
         <NodeLayout
           Size="133,42"
           Id="Package\Cargar Productos\Merge Join"
-          TopLeft="339,250" />
+          TopLeft="338,250" />
         <NodeLayout
           Size="171,44"
           Id="Package\Cargar Productos\Destination Productos DW"
-          TopLeft="214,487" />
+          TopLeft="201,534" />
         <NodeLayout
           Size="157,42"
           Id="Package\Cargar Productos\Source Productos"
@@ -23114,105 +23588,41 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Cargar Productos.Paths[Nuevo Registro]"
-          TopLeft="412.5,395">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-113,92"
-              Start="0,0"
-              End="-113,84.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,42" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,42"
-                    Point2="0,46"
-                    Point3="-4,46" />
-                  <mssgle:LineSegment
-                    End="-109,46" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-109,46"
-                    Point2="-113,46"
-                    Point3="-113,50" />
-                  <mssgle:LineSegment
-                    End="-113,84.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="-90.57703125,51,68.1540625,11.384765625"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Cargar Productos.Paths[Merge Join Output]"
-          TopLeft="409,292">
+          TopLeft="404.5,292">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,61"
+              EndConnector="8,61"
               Start="0,0"
-              End="0,53.5">
+              End="8,53.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,53.5" />
+                    End="0,26.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,26.5"
+                    Point2="0,30.5"
+                    Point3="4,30.5" />
+                  <mssgle:LineSegment
+                    End="4,30.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="4,30.5"
+                    Point2="8,30.5"
+                    Point3="8,34.5" />
+                  <mssgle:LineSegment
+                    End="8,53.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Cargar Productos.Paths[Editado]"
-          TopLeft="437.666666666667,395">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="99.8333333333334,94"
-              Start="0,0"
-              End="99.8333333333334,86.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,34.1618929016189" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,34.1618929016189"
-                    Point2="0,38.1618929016189"
-                    Point3="4,38.1618929016189" />
-                  <mssgle:LineSegment
-                    End="95.8333333333334,38.1618929016189" />
-                  <mssgle:CubicBezierSegment
-                    Point1="95.8333333333334,38.1618929016189"
-                    Point2="99.8333333333334,38.1618929016189"
-                    Point3="99.8333333333334,42.1618929016189" />
-                  <mssgle:LineSegment
-                    End="99.8333333333334,86.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="32.9346354166667,43.1618929016189,33.9640625,9.7490234375"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -23221,9 +23631,9 @@ INNER JOIN (
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="125.166666666667,65"
+              EndConnector="124.166666666667,65"
               Start="0,0"
-              End="125.166666666667,57.5">
+              End="124.166666666667,57.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
@@ -23234,21 +23644,19 @@ INNER JOIN (
                     Point2="0,38.5364041604755"
                     Point3="4,38.5364041604755" />
                   <mssgle:LineSegment
-                    End="121.166666666667,38.5364041604755" />
+                    End="120.166666666667,38.5364041604755" />
                   <mssgle:CubicBezierSegment
-                    Point1="121.166666666667,38.5364041604755"
-                    Point2="125.166666666667,38.5364041604755"
-                    Point3="125.166666666667,42.5364041604755" />
+                    Point1="120.166666666667,38.5364041604755"
+                    Point2="124.166666666667,38.5364041604755"
+                    Point3="124.166666666667,42.5364041604755" />
                   <mssgle:LineSegment
-                    End="125.166666666667,57.5" />
+                    End="124.166666666667,57.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -23257,9 +23665,9 @@ INNER JOIN (
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-140.666666666667,54"
+              EndConnector="-141.666666666667,54"
               Start="0,0"
-              End="-140.666666666667,46.5">
+              End="-141.666666666667,46.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
@@ -23270,21 +23678,19 @@ INNER JOIN (
                     Point2="0,32.0148588410104"
                     Point3="-4,32.0148588410104" />
                   <mssgle:LineSegment
-                    End="-136.666666666667,32.0148588410104" />
+                    End="-137.666666666667,32.0148588410104" />
                   <mssgle:CubicBezierSegment
-                    Point1="-136.666666666667,32.0148588410104"
-                    Point2="-140.666666666667,32.0148588410104"
-                    Point3="-140.666666666667,36.0148588410104" />
+                    Point1="-137.666666666667,32.0148588410104"
+                    Point2="-141.666666666667,32.0148588410104"
+                    Point3="-141.666666666667,36.0148588410104" />
                   <mssgle:LineSegment
-                    End="-140.666666666667,46.5" />
+                    End="-141.666666666667,46.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -23306,14 +23712,149 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="158,42"
+          Id="Package\Cargar Productos\Derived Column"
+          TopLeft="208,457" />
+        <EdgeLayout
+          Id="Package\Cargar Productos.Paths[Nuevo Registro]"
+          TopLeft="387.333333333333,395">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-100.333333333333,62"
+              Start="0,0"
+              End="-100.333333333333,54.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,21.1706102117061" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,21.1706102117061"
+                    Point2="0,25.1706102117061"
+                    Point3="-4,25.1706102117061" />
+                  <mssgle:LineSegment
+                    End="-96.3333333333333,25.1706102117061" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-96.3333333333333,25.1706102117061"
+                    Point2="-100.333333333333,25.1706102117061"
+                    Point3="-100.333333333333,29.1706102117061" />
+                  <mssgle:LineSegment
+                    End="-100.333333333333,54.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
+              BoundingBox="-84.2436979166667,30.1706102117061,68.1540625,11.384765625"
               RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Cargar Productos.Paths[Derived Column Output]"
+          TopLeft="286.75,499">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,35"
+              Start="0,0"
+              End="0,27.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,27.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="158,42"
+          Id="Package\Cargar Productos\Derived Column 1"
+          TopLeft="450,450" />
+        <EdgeLayout
+          Id="Package\Cargar Productos.Paths[Editado]"
+          TopLeft="437.666666666667,395">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="91.3333333333334,55"
+              Start="0,0"
+              End="91.3333333333334,47.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,18.3287671232877" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,18.3287671232877"
+                    Point2="0,22.3287671232877"
+                    Point3="4,22.3287671232877" />
+                  <mssgle:LineSegment
+                    End="87.3333333333334,22.3287671232877" />
+                  <mssgle:CubicBezierSegment
+                    Point1="87.3333333333334,22.3287671232877"
+                    Point2="91.3333333333334,22.3287671232877"
+                    Point3="91.3333333333334,26.3287671232877" />
+                  <mssgle:LineSegment
+                    End="91.3333333333334,47.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="28.6846354166667,27.3287671232877,33.9640625,9.7490234375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Cargar Productos.Paths[Derived Column Output1]"
+          TopLeft="531.25,492">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,42"
+              Start="0,0"
+              End="0,34.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,34.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Cargar Productos\Destination Productos DW 1">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
   <PipelineComponentMetadata
     design-time-name="Package\Cargar Productos\Destination Productos DW">
     <Properties>
@@ -23425,9 +23966,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -23461,9 +24000,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -23485,9 +24022,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -23509,9 +24044,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -23533,9 +24066,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -23557,9 +24088,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -23605,9 +24134,7 @@ INNER JOIN (
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -23648,49 +24175,61 @@ INNER JOIN (
       <GraphLayout
         Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
+          Size="144,42"
+          Id="Package\Load Facts\Source Facts"
+          TopLeft="469,163" />
+        <NodeLayout
           Size="141,42"
           Id="Package\Load Facts\Lookup Date"
           TopLeft="251,168" />
         <NodeLayout
-          Size="185,42"
-          Id="Package\Load Facts\Merge Facts y Orders"
-          TopLeft="327,325" />
-        <NodeLayout
-          Size="99,42"
-          Id="Package\Load Facts\Sort"
-          TopLeft="266,241" />
-        <NodeLayout
-          Size="158,42"
-          Id="Package\Load Facts\Destination Fact"
-          TopLeft="761,320" />
-        <NodeLayout
-          Size="162,42"
-          Id="Package\Load Facts\Lookup Producto"
-          TopLeft="777,78" />
-        <NodeLayout
-          Size="142,42"
-          Id="Package\Load Facts\North Orders"
-          TopLeft="92,67" />
-        <NodeLayout
-          Size="152,42"
-          Id="Package\Load Facts\Lookup Cliente"
-          TopLeft="303,70" />
-        <NodeLayout
-          Size="134,42"
-          Id="Package\Load Facts\Split Fecha"
-          TopLeft="68,170" />
+          Size="168,42"
+          Id="Package\Load Facts\Destination Fact 1"
+          TopLeft="534,497" />
         <NodeLayout
           Size="168,42"
           Id="Package\Load Facts\Lookup Empleado"
           TopLeft="540,73" />
         <NodeLayout
-          Size="159,42"
-          Id="Package\Load Facts\Conditional Split"
-          TopLeft="546,326" />
+          Size="134,42"
+          Id="Package\Load Facts\Split Fecha"
+          TopLeft="68,170" />
+        <NodeLayout
+          Size="142,42"
+          Id="Package\Load Facts\North Orders"
+          TopLeft="92,67" />
+        <NodeLayout
+          Size="158,42"
+          Id="Package\Load Facts\Destination Fact"
+          TopLeft="761,320" />
         <NodeLayout
           Size="108,42"
           Id="Package\Load Facts\Sort 1"
           TopLeft="487,244" />
+        <NodeLayout
+          Size="162,42"
+          Id="Package\Load Facts\Lookup Producto"
+          TopLeft="777,78" />
+        <NodeLayout
+          Size="158,42"
+          Id="Package\Load Facts\Derived Column"
+          TopLeft="541,418" />
+        <NodeLayout
+          Size="99,42"
+          Id="Package\Load Facts\Sort"
+          TopLeft="266,241" />
+        <NodeLayout
+          Size="152,42"
+          Id="Package\Load Facts\Lookup Cliente"
+          TopLeft="303,70" />
+        <NodeLayout
+          Size="185,42"
+          Id="Package\Load Facts\Merge Facts y Orders"
+          TopLeft="327,325" />
+        <NodeLayout
+          Size="159,42"
+          Id="Package\Load Facts\Conditional Split"
+          TopLeft="546,326" />
         <EdgeLayout
           Id="Package\Load Facts.Paths[Sort Output1]"
           TopLeft="541,286">
@@ -23751,6 +24290,28 @@ INNER JOIN (
                     Point3="74.5,28.983922829582" />
                   <mssgle:LineSegment
                     End="74.5,34.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Facts.Paths[OLE DB Source Output1]"
+          TopLeft="541,205">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,39"
+              Start="0,0"
+              End="0,31.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,31.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -23936,62 +24497,6 @@ INNER JOIN (
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Load Facts.Paths[Derived Column Output]"
-          TopLeft="202,190">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="49,0"
-              Start="0,0"
-              End="41.5,0">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="41.5,0" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <NodeLayout
-          Size="144,42"
-          Id="Package\Load Facts\Source Facts"
-          TopLeft="469,163" />
-        <EdgeLayout
-          Id="Package\Load Facts.Paths[OLE DB Source Output1]"
-          TopLeft="541,205">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,39"
-              Start="0,0"
-              End="0,31.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,31.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <NodeLayout
-          Size="168,42"
-          Id="Package\Load Facts\Destination Fact 1"
-          TopLeft="534,497" />
-        <NodeLayout
-          Size="158,42"
-          Id="Package\Load Facts\Derived Column"
-          TopLeft="541,418" />
-        <EdgeLayout
           Id="Package\Load Facts.Paths[Editado]"
           TopLeft="622.75,368">
           <EdgeLayout.Curve>
@@ -24037,9 +24542,44 @@ INNER JOIN (
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Facts.Paths[Derived Column Output]"
+          TopLeft="202,190">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="49,0"
+              Start="0,0"
+              End="41.5,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="41.5,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Facts\Source Facts">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
   <PipelineComponentMetadata
     design-time-name="Package\Load Facts\Lookup Date">
     <Properties>
@@ -24058,6 +24598,50 @@ INNER JOIN (
         <Value
           type="q4:string">0</Value>
       </Property>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Facts\Destination Fact 1">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Facts\Lookup Empleado">
+    <Properties>
+      <Property>
+        <Name>OverwriteParamsSQLProp</Name>
+        <Value
+          type="q2:string">false</Value>
+      </Property>
+      <Property>
+        <Name>UsedTableName</Name>
+        <Value
+          type="q3:string">[dbo].[Dim_Empleado]</Value>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q4:string">0</Value>
+      </Property>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Facts\North Orders">
+    <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
       </Property>
@@ -24100,14 +24684,6 @@ INNER JOIN (
     </Properties>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
-    design-time-name="Package\Load Facts\North Orders">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <PipelineComponentMetadata
     design-time-name="Package\Load Facts\Lookup Cliente">
     <Properties>
       <Property>
@@ -24127,55 +24703,6 @@ INNER JOIN (
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <PipelineComponentMetadata
-    design-time-name="Package\Load Facts\Lookup Empleado">
-    <Properties>
-      <Property>
-        <Name>OverwriteParamsSQLProp</Name>
-        <Value
-          type="q2:string">false</Value>
-      </Property>
-      <Property>
-        <Name>UsedTableName</Name>
-        <Value
-          type="q3:string">[dbo].[Dim_Empleado]</Value>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q4:string">0</Value>
-      </Property>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <PipelineComponentMetadata
-    design-time-name="Package\Load Facts\Source Facts">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <PipelineComponentMetadata
-    design-time-name="Package\Load Facts\Destination Fact 1">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
       </Property>
     </Properties>
   </PipelineComponentMetadata>
