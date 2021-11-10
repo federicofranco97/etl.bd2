@@ -9,6 +9,5 @@ namespace DB.ETL.Data.Dao
     public class BaseDao
     {
         public NorthwindEntities north = new NorthwindEntities();
-        public NorhwindDWEntities dwNorth = new NorhwindDWEntities();
     }
 }

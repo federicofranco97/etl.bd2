@@ -10,14 +10,11 @@
 namespace DB.ETL.Data
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class sysdiagram
+    public partial class OrderDetails_Quantity1_Result
     {
-        public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public int OrderID { get; set; }
+        public Nullable<int> Quantity { get; set; }
+        public string CustomerID { get; set; }
     }
 }

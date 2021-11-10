@@ -81,45 +81,18 @@
       <DependentUpon>Nothwind.tt</DependentUpon>
     </Compile>
     <Compile Include="Dao\BaseDao.cs" />
-    <Compile Include="Dao\OrderDao.cs" />
-    <Compile Include="Dim_Cliente.cs">
-      <DependentUpon>Northwind.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Dim_Empleado.cs">
-      <DependentUpon>Northwind.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Dim_Fecha.cs">
-      <DependentUpon>Northwind.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Dim_Producto.cs">
-      <DependentUpon>Northwind.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Dao\EmpleadoDao.cs" />
+    <Compile Include="Dao\EnviosDao.cs" />
+    <Compile Include="Dao\OrdenDao.cs" />
+    <Compile Include="Dao\ProductoDao.cs" />
     <Compile Include="Employee.cs">
       <DependentUpon>Nothwind.tt</DependentUpon>
     </Compile>
     <Compile Include="Employee_Sales_by_Country_Result.cs">
       <DependentUpon>Nothwind.tt</DependentUpon>
     </Compile>
-    <Compile Include="Fact_Orden.cs">
-      <DependentUpon>Northwind.tt</DependentUpon>
-    </Compile>
     <Compile Include="Invoice.cs">
       <DependentUpon>Nothwind.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Northwind.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Northwind.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Northwind.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Northwind.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Northwind.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Northwind.edmx</DependentUpon>
     </Compile>
     <Compile Include="Nothwind.Context.cs">
       <AutoGen>True</AutoGen>
@@ -137,6 +110,12 @@
       <DependentUpon>Nothwind.edmx</DependentUpon>
     </Compile>
     <Compile Include="Order.cs">
+      <DependentUpon>Nothwind.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderDetails_Quantity1_Result.cs">
+      <DependentUpon>Nothwind.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderDetails_Quantity_Result.cs">
       <DependentUpon>Nothwind.tt</DependentUpon>
     </Compile>
     <Compile Include="Orders_Qry.cs">
@@ -183,10 +162,10 @@
       <DependentUpon>Nothwind.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>Northwind.tt</DependentUpon>
+      <DependentUpon>Nothwind.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_helpdiagrams_Result.cs">
-      <DependentUpon>Northwind.tt</DependentUpon>
+      <DependentUpon>Nothwind.tt</DependentUpon>
     </Compile>
     <Compile Include="Summary_of_Sales_by_Quarter.cs">
       <DependentUpon>Nothwind.tt</DependentUpon>
@@ -196,9 +175,6 @@
     </Compile>
     <Compile Include="Supplier.cs">
       <DependentUpon>Nothwind.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sysdiagram.cs">
-      <DependentUpon>Northwind.tt</DependentUpon>
     </Compile>
     <Compile Include="Ten_Most_Expensive_Products_Result.cs">
       <DependentUpon>Nothwind.tt</DependentUpon>
@@ -215,29 +191,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <EntityDeploy Include="Northwind.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Northwind.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="Northwind.edmx.diagram">
-      <DependentUpon>Northwind.edmx</DependentUpon>
-    </None>
     <None Include="Nothwind.edmx.diagram">
       <DependentUpon>Nothwind.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Northwind.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Northwind.edmx</DependentUpon>
-      <LastGenOutput>Northwind.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Northwind.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Northwind.edmx</DependentUpon>
-      <LastGenOutput>Northwind.cs</LastGenOutput>
-    </Content>
     <Content Include="Nothwind.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Nothwind.Context.cs</LastGenOutput>
